@@ -127,3 +127,7 @@ exports.deletePet = async function(req, res) {
         return res.json({ message: 'Deleted '});
     });
 }
+
+exports.carlosEndpoint = function(req, res) {
+    // TODO: Return mascotas ordenadas por fecha de nacimiento
+}
