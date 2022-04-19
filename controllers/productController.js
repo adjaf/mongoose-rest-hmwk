@@ -34,3 +34,7 @@ exports.deleteProduct = function(req, res) {
 
     return res.json({ message: 'Product Deleted' });
 }
+
+exports.davidEndpoint = function(req, res) {
+    // TODO: Return productos ordenados por precio
+}
