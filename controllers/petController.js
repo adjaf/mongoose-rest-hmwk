@@ -127,3 +127,7 @@ exports.deletePet = async function(req, res) {
         return res.json({ message: 'Deleted '});
     });
 }
+
+exports.cynthiaEndpoint = function(req, res) {
+    // TODO: Buscar mascotas por specie
+}
