@@ -127,3 +127,7 @@ exports.deletePet = async function(req, res) {
         return res.json({ message: 'Deleted '});
     });
 }
+
+exports.julianEndpoint = function(req, res) {
+    // TODO: Retornar las 3 mascotas más pesadas
+}
