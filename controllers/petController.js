@@ -127,3 +127,7 @@ exports.deletePet = async function(req, res) {
         return res.json({ message: 'Deleted '});
     });
 }
+
+exports.samuelEndpoint = function(req, res) {
+    // TODO: Return mascotas por genre (el genre se manda en el body)
+}
