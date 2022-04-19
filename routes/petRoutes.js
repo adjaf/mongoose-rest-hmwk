@@ -2,6 +2,7 @@ const router = require('express').Router();
 const petController = require('../controllers/petController');
 
 router.get('/', petController.getAll);
+router.get('/ivanEndpoint', petController.ivanEndpoint);
 router.get('/searchPets', petController.searchPetsByName);
 router.get('/:id', petController.findOne);
 router.post('/', petController.createPet);

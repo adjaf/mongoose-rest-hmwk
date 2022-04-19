@@ -127,3 +127,7 @@ exports.deletePet = async function(req, res) {
         return res.json({ message: 'Deleted '});
     });
 }
+
+exports.ivanEndpoint = function(req, res) {
+    // TODO: Return pets con status ‘deceased’ con datos de su dueño 
+}
