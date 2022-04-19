@@ -75,3 +75,7 @@ exports.deleteOwner = function(req, res) {
         }
     );
 }
+
+exports.joseEndpoint = function(req, res) {
+    // TODO: Retornar todos los owners ordenados por first_name
+}

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const ownerController = require('../controllers/ownerController');
 
 router.get('/', ownerController.getAll);
+router.get('/joseEndpoint', ownerController.joseEndpoint);
 router.get('/:id', ownerController.findOne);
 router.post('/', ownerController.createOwner);
 router.patch('/:id', ownerController.updateOwner);
