@@ -34,3 +34,7 @@ exports.deleteProduct = function(req, res) {
 
     return res.json({ message: 'Product Deleted' });
 }
+
+exports.oscarEndpoint = function(req, res) {
+    // TODO: Return productos sin descripción
+}
