@@ -75,3 +75,7 @@ exports.deleteOwner = function(req, res) {
         }
     );
 }
+
+exports.marioEndpoint = function(req, res) {
+    // TODO: Retornar los owners que no tengan mascotas
+}
