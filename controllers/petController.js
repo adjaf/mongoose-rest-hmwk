@@ -128,6 +128,15 @@ exports.deletePet = async function(req, res) {
     });
 }
 
-exports.ivanEndpoint = function(req, res) {
-    // TODO: Return pets con status ‘deceased’ con datos de su dueño 
+exports.ivanEndpoint = async function(req, res) {
+    try {
+        const pets = await Pet.find({
+            status: 'deceased' 
+        }).populate('owner');
+
+        return res.json({ pets });
+    } catch (error) {
+        return res.json({ error });
+    }    
+    // DONE :D : Return pets con status ‘deceased’ con datos de su dueño 
 }
