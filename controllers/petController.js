@@ -26,19 +26,14 @@ exports.findOne =  async function(req, res) {
 
     if (!pet) {
         return res.status(404).json({ err: 'Not found' });
-    }
+    } 
 
     return res.json({ pet });
 }
 
 exports.searchPetsByName = function(req, res) {
     // This comes in request as searchPets?name=value
-    const name = req.query.name || '';
-    /*
-    *   This performs a search based on a regexp that is the name, 
-    *   'i' is for match upper or lower case
-    *   returns the pets that matched the search
-    */
+    const name = req.body.name || '';
     Pet.find({
         name: { $regex: name, $options: 'i' } 
     }, function(err, pets) {
@@ -130,4 +125,14 @@ exports.deletePet = async function(req, res) {
 
 exports.samuelEndpoint = function(req, res) {
     // TODO: Return mascotas por genre (el genre se manda en el body)
+    const gender = req.body.gender || '';
+    Pet.find({
+        gender: gender
+    }, function(err, pets) {
+        if (err) {
+            return res.status(400).json({ err });
+        }
+
+        return res.json({ pets });
+    });
 }

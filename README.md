@@ -30,7 +30,7 @@
 7. Run `npm run start`
 8. Develop!
 
-## Homework
+## Homework 
 
 1. Search for the TODO comments in the project
 2. Implement the requested changes
