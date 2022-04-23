@@ -25,9 +25,14 @@ exports.getAll = async function(req, res) {
 
 exports.findOne = async function(req, res) {
     const id = req.params.id;
-    // TODO Retornar el owner con sus pets, se debe ver name y type de la mascota
+    try{
+        //Returns the owner
+        const owner = await Owner.findById(id);
+        return res.json({ owner });
+    }catch(error){
+        return res.status(404).json({ err: 'Not found' });
+    }
     
-    return res.json({ owner });
 }
 
 exports.createOwner = function(req, res) {
@@ -76,6 +81,13 @@ exports.deleteOwner = function(req, res) {
     );
 }
 
-exports.joseEndpoint = function(req, res) {
-    // TODO: Retornar todos los owners ordenados por first_name
+exports.joseEndpoint = async function(req, res) {
+    try {
+        // It returns the owner with their pets in an array, and only shows name and id
+        const owners = await Owner.find().sort( {"first_name":1}).populate('pets', 'name');
+
+        return res.json({ owners });
+    } catch (error) {
+        return res.status(400).json({ error });
+    }
 }
