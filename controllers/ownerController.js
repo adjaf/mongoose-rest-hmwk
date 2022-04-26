@@ -26,6 +26,8 @@ exports.getAll = async function(req, res) {
 exports.findOne = async function(req, res) {
     const id = req.params.id;
     // TODO Retornar el owner con sus pets, se debe ver name y type de la mascota
+    const query = { status: 'active', _id: id };
+    const owner = await Owner.find(query).populate('pets', 'name type');
     
     return res.json({ owner });
 }
