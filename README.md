@@ -10,7 +10,7 @@
 ## Running the project
 
 1. Download the repo 
-2. Create in MongoDB Compass a database called **sciopets** or a name of your choice.
+2. Create in MongoDB Compass a database called **sciopets** or a name of your choice.   
 3. Run `npm install`
 4. Checkout your branch
     `git fetch --all`

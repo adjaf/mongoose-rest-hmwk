@@ -128,6 +128,10 @@ exports.deletePet = async function(req, res) {
     });
 }
 
-exports.julianEndpoint = function(req, res) {
-    // TODO: Retornar las 3 mascotas más pesadas
+exports.julianEndpoint = async function(req,res) {
+    // DONE: Retornar las 3 mascotas más pesadas
+    
+    const result = await Pet.find().sort({weight:-1}).limit(3);
+
+    return res.json({ result });
 }
