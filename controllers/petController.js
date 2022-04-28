@@ -128,6 +128,9 @@ exports.deletePet = async function(req, res) {
     });
 }
 
-exports.carlosEndpoint = function(req, res) {
-    // TODO: Return mascotas ordenadas por fecha de nacimiento
+exports.carlosEndpoint =async  function(req, res) {
+    const pet  = await Pet.find();
+    const array = pet.sort((a, b) => new Date(a.fechas).getTime() > new Date(b.fechas).getTime());
+
+    return res.json({array})
 }

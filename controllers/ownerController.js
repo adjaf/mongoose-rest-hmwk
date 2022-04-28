@@ -3,7 +3,7 @@ const Owner = mongoose.model('Owner');
 const Pet = mongoose.model('Pet');
 
 
-exports.getAll = async function(req, res) {
+exports.getAll = async function (req, res) {
     const query = { status: 'active' };
 
     if (req.query.withPets === '1') {
@@ -23,17 +23,24 @@ exports.getAll = async function(req, res) {
 
 }
 
-exports.findOne = async function(req, res) {
+exports.findOne = async function (req, res) {
     const id = req.params.id;
-    // TODO Retornar el owner con sus pets, se debe ver name y type de la mascota
-    
-    return res.json({ owner });
+
+    try {
+        const owner = await Owner.findById(id).populate('pets', ['name', 'type']);
+        return res.json({ owner })
+    } catch (error) {
+        return res.status(400).json({ error });
+    }
+
+
+
 }
 
-exports.createOwner = function(req, res) {
+exports.createOwner = function (req, res) {
     const newOwner = new Owner(req.body);
 
-    newOwner.save(function(err, owner) {
+    newOwner.save(function (err, owner) {
         if (err) {
             return res.status(400).json({ err });
         }
@@ -42,35 +49,35 @@ exports.createOwner = function(req, res) {
     });
 }
 
-exports.updateOwner = function(req, res) {
+exports.updateOwner = function (req, res) {
     const id = req.params.id;
     const body = req.body;
-    
-    Owner.findByIdAndUpdate(id, body, function(err, owner){
+
+    Owner.findByIdAndUpdate(id, body, function (err, owner) {
         if (err) {
             return res.status(400).json({ err });
         }
         if (!owner) {
             return res.status(404).json({ err: 'Not found' });
         }
-        
+
         return res.json({ owner });
     });
 }
 
-exports.deleteOwner = function(req, res) {
+exports.deleteOwner = function (req, res) {
     const id = req.params.id;
 
     // We will not remove the owner, just set it as inactive
-    Owner.findByIdAndUpdate(id, { status: 'inactive'},
-        function(err, owner) {
+    Owner.findByIdAndUpdate(id, { status: 'inactive' },
+        function (err, owner) {
             if (err) {
                 return res.status(400).json({ err });
             }
             if (!owner) {
                 return res.status(404).json({ err: 'Not found' });
             }
-            
+
             return res.json({ message: "Owner set as inactive" });
         }
     );
