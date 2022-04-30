@@ -1,3 +1,4 @@
+const { query } = require('express');
 const mongoose = require('mongoose');
 const Owner = mongoose.model('Owner');
 const Pet = mongoose.model('Pet');
@@ -26,8 +27,15 @@ exports.getAll = async function(req, res) {
 exports.findOne = async function(req, res) {
     const id = req.params.id;
     // TODO Retornar el owner con sus pets, se debe ver name y type de la mascota
+    try{
+        const owner = await Owner.find(query).populate('pets', 'name type');
+        return res.json({ owner });
+    }
+    catch (error){
+        return res.status(400).json({ error });
+    }
     
-    return res.json({ owner });
+
 }
 
 exports.createOwner = function(req, res) {
