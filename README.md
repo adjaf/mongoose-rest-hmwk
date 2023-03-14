@@ -17,14 +17,13 @@
     2. `git fetch --all`
     3. `git checkout **name**`
      where **name** is replaced by your name:
-    - darwing
-    - mariana
-    - jose-luis
-    - luis-felipe
-    - nestor
-    - rafael
-    - ruben
-    - kevin
+    - diego
+    - lizeth
+    - alejandro
+    - angel
+    - fernando
+    - ignacio
+    - jose
 5. (Optional) create a `.env` file in the root to specify your config values.
 6. (Optional but useful) Run `npm run seed` to fill your database with 10 teachers, 10 courses and 10 students
 7. Run `npm run start`
