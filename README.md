@@ -38,7 +38,7 @@
 
 ## Endpoints
 Example:
-- http://localhost:3000/api/courses
-- http://localhost:3000/api/teachers
-- http://localhost:3000/api/students
+- http://localhost:3000/api/
+- http://localhost:3000/api/
+- http://localhost:3000/api/
 
