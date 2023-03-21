@@ -125,3 +125,11 @@ exports.assignSubject = async function(req, res) {
         return res.status(400).send({ error });
     }
 }
+
+exports.getByCareer = function(req, res) {
+    const career = req.params.career;
+
+    // TODO: devolver students que esten en la career que se envía
+    
+
+}
