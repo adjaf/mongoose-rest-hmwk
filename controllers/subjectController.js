@@ -31,3 +31,7 @@ exports.assignTeacher = function(req, res) {
 
     // TODO: assign teacher to the subject, if it has a teacher, replace it
 }
+
+exports.withoutStudents = function(req, res) {
+    // TODO: devolver materias sin students
+}

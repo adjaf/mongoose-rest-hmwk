@@ -3,6 +3,7 @@ const subjectController = require('../controllers/subjectController');
 
 router.post('', subjectController.createSubject);
 router.get('', subjectController.getAll);
+router.get('/without-students', subjectController.withoutStudents);
 router.get('/search/:name', subjectController.getByName);
 router.post('/assign-teacher/:id', subjectController.assignTeacher);
 router.get('/:id', subjectController.getOne);
