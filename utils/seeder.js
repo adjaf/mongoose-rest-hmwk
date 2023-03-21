@@ -77,11 +77,13 @@ async function runSeeder() {
             const newStudent = await Student.create(newStudentData);
 
             console.log(newStudent);
-            // Add student id to course's students array
-            allSubjects[randomSubjectIndex].students.push(newStudent);
-            allSubjects[randomSubjectIndex2].students.push(newStudent);
-            await allSubjects[randomSubjectIndex].save();
-            await allSubjects[randomSubjectIndex2].save();
+            if (shouldHaveSubjects) {
+                // Add student id to course's students array
+                allSubjects[randomSubjectIndex].students.push(newStudent);
+                allSubjects[randomSubjectIndex2].students.push(newStudent);
+                await allSubjects[randomSubjectIndex].save();
+                await allSubjects[randomSubjectIndex2].save();
+            }
         } catch (error) {
             console.log(error);
         }
@@ -93,14 +95,18 @@ async function runSeeder() {
     for (let i = 0; i < 10; i++) {
         const randomGender = genders[Math.floor(Math.random() * genders.length)];
         const randomSubjectIndex = faker.datatype.number({ min: 0, max: 9 });
+        const shouldHaveSubject = faker.datatype.boolean();
 
         let newTeacherData = {
             first_name: faker.name.firstName(randomGender),
-            last_name: faker.name.lastName(),
-            subjects: [
-                allSubjects[randomSubjectIndex]._id
-            ]
+            last_name: faker.name.lastName()
         };
+
+        if (shouldHaveSubject) {
+            newTeacherData.subjects = [
+                allSubjects[randomSubjectIndex]._id
+            ];
+        }
 
         newTeacherData.email = faker.internet.email(newTeacherData.first_name, newTeacherData.last_name);
 
@@ -109,9 +115,11 @@ async function runSeeder() {
 
             console.log(newTeacher);
 
-            // Add teacher id to course
-            allSubjects[randomSubjectIndex].teacher = newTeacher;
-            await allSubjects[randomSubjectIndex].save();
+            if (shouldHaveSubject) {
+                // Add teacher id to course
+                allSubjects[randomSubjectIndex].teacher = newTeacher;
+                await allSubjects[randomSubjectIndex].save();
+            } 
         } catch (error) {
             console.log('something ocurred',error);
         }
