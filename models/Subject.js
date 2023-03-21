@@ -21,4 +21,6 @@ const SubjectModel = new mongoose.Schema({
     ]
 });
 
+// TODO: Crear metodo virtual "formattedHours", que devuelva "${hours} hours."
+
 mongoose.model('Subject', SubjectModel);
