@@ -4,6 +4,7 @@ const studentController = require('../controllers/studentController');
 router.post('', studentController.createStudent);
 router.get('', studentController.getAll);
 router.get('/search/:search', studentController.getByEmail);
+router.post('/search-by-student-id/:studentId', studentController.studentsById );
 router.post('/assign-subject/:id', studentController.assignSubject);
 router.get('/:id', studentController.getOne);
 router.patch('/:id', studentController.updateStudent);

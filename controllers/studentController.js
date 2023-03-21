@@ -125,3 +125,9 @@ exports.assignSubject = async function(req, res) {
         return res.status(400).send({ error });
     }
 }
+
+exports.studentsById = function(req, res) {
+    const studentId = req.params.studentId;
+
+    // TODO: Devolver student que tenga ese student_id
+}
