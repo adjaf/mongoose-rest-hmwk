@@ -25,7 +25,7 @@
     - ignacio
     - jose
 5. (Optional) create a `.env` file in the root to specify your config values.
-6. (Optional but useful) Run `npm run seed` to fill your database with 10 teachers, 10 courses and 10 students
+6. (Optional but useful) Run `npm run seed` to fill your database with 10 teachers, 10 subjects and 10 students
 7. Run `npm run start`
 8. Develop!
 
@@ -38,7 +38,7 @@
 
 ## Endpoints
 Example:
-- http://localhost:3000/api/
-- http://localhost:3000/api/
-- http://localhost:3000/api/
+- http://localhost:3000/api/students
+- http://localhost:3000/api/teachers
+- http://localhost:3000/api/subjects
 
