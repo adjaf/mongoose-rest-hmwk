@@ -42,7 +42,7 @@ async function runSeeder() {
     const allSubjects = await Subject.find();
     const careers = ['IBQ', 'TICS', 'ISC', 'IND', 'IGE', 'MEC'];
 
-    console.log('CREATING 10 STUDENTS WITH SUBJECTS....\n');
+    console.log('CREATING 10 STUDENTS WITH OR WITHOUT SUBJECTS....\n');
     // 10 students with 2 courses
     for (let i = 0; i < 10; i++) {
         const randomGender = genders[Math.floor(Math.random() * genders.length)];
