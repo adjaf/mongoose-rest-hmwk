@@ -10,7 +10,7 @@ mongoDBConnection.then(() => {
 
 require('../models/index');
 const Student = mongoose.model('Student');
-const Course = mongoose.model('Course');
+const Subject = mongoose.model('Subject');
 const Teacher = mongoose.model('Teacher');
 
 const genders = ['male', 'female'];
@@ -18,47 +18,51 @@ const genders = ['male', 'female'];
 async function runSeeder() {
     // Clean database
     await Student.deleteMany();
-    await Course.deleteMany();
+    await Subject.deleteMany();
     await Teacher.deleteMany();
 
 
-    console.log('CREATING 10 Courses....\n');
+    console.log('CREATING 10 Subjects....\n');
     // 10 Owners
     for (let i = 0; i < 10; i++) {
-        const newCourseData = {
-            title: faker.random.words(2)
+        const newSubjectData = {
+            name: faker.random.words(2),
+            hours: faker.datatype.number({ min: 10, max: 30})
         };
 
         try {
-            const fakeCourse = await Course.create(newCourseData);
-            console.log(fakeCourse);
+            const fakeSubject = await Subject.create(newSubjectData);
+            console.log(fakeSubject);
         } catch (error) {
             console.log('something ocurred');
         }
     }
 
     // Get all Owners to use their id;
-    const allCourses = await Course.find();
+    const allSubjects = await Subject.find();
+    const careers = ['IBQ', 'TICS', 'ISC', 'IND', 'IGE', 'MEC'];
 
-    console.log('CREATING 10 STUDENTS WITH COURSES....\n');
+    console.log('CREATING 10 STUDENTS WITH SUBJECTS....\n');
     // 10 students with 2 courses
     for (let i = 0; i < 10; i++) {
         const randomGender = genders[Math.floor(Math.random() * genders.length)];
-        const randomCourseIndex = faker.datatype.number({ min: 0, max: 9 });
-        let randomCourseIndex2 = faker.datatype.number({ min: 0, max: 9 });
+        const randomSubjectIndex = faker.datatype.number({ min: 0, max: 9 });
+        let randomSubjectIndex2 = faker.datatype.number({ min: 0, max: 9 });
+        const randomStudentId = faker.random.alphaNumeric(6).toUpperCase();
 
         /** Do random again if repeated course */
-        while (randomCourseIndex2 == randomCourseIndex) {
-            randomCourseIndex2 = faker.datatype.number({ min: 0, max: 9 });
+        while (randomSubjectIndex2 == randomSubjectIndex) {
+            randomSubjectIndex2 = faker.datatype.number({ min: 0, max: 9 });
         } 
     
         const newStudentData = {
             first_name: faker.name.firstName(randomGender),
             last_name: faker.name.lastName(),
-            birth_date: faker.date.between('01/01/1990', '01/01/2004').toLocaleDateString('mx'),
-            courses: [
-                allCourses[randomCourseIndex]._id, // Course 1 Id
-                allCourses[randomCourseIndex2]._id // Course 2 Id
+            career: faker.helpers.arrayElement(careers),
+            student_id: randomStudentId,
+            subjects: [
+                allSubjects[randomSubjectIndex]._id, // Subject 1 Id
+                allSubjects[randomSubjectIndex2]._id // Subject 2 Id
             ]
         };
 
@@ -70,10 +74,10 @@ async function runSeeder() {
 
             console.log(newStudent);
             // Add student id to course's students array
-            allCourses[randomCourseIndex].students.push(newStudent);
-            allCourses[randomCourseIndex2].students.push(newStudent);
-            await allCourses[randomCourseIndex].save();
-            await allCourses[randomCourseIndex2].save();
+            allSubjects[randomSubjectIndex].students.push(newStudent);
+            allSubjects[randomSubjectIndex2].students.push(newStudent);
+            await allSubjects[randomSubjectIndex].save();
+            await allSubjects[randomSubjectIndex2].save();
         } catch (error) {
             console.log(error);
         }
@@ -81,17 +85,16 @@ async function runSeeder() {
 
 
     console.log('CREATING 10 TEACHERS....');
-    // 10 teachers with 1 course
+    // 10 teachers with 1 Subject
     for (let i = 0; i < 10; i++) {
         const randomGender = genders[Math.floor(Math.random() * genders.length)];
-        const randomCourseIndex = faker.datatype.number({ min: 0, max: 9 });
+        const randomSubjectIndex = faker.datatype.number({ min: 0, max: 9 });
 
         let newTeacherData = {
             first_name: faker.name.firstName(randomGender),
             last_name: faker.name.lastName(),
-            birth_date: faker.date.between('01/01/1955', '01/01/1996').toLocaleDateString('mx'),
-            courses: [
-                allCourses[randomCourseIndex]._id
+            subjects: [
+                allSubjects[randomSubjectIndex]._id
             ]
         };
 
@@ -103,10 +106,10 @@ async function runSeeder() {
             console.log(newTeacher);
 
             // Add teacher id to course
-            allCourses[randomCourseIndex].teacher = newTeacher;
-            await allCourses[randomCourseIndex].save();
+            allSubjects[randomSubjectIndex].teacher = newTeacher;
+            await allSubjects[randomSubjectIndex].save();
         } catch (error) {
-            console.log('something ocurred');
+            console.log('something ocurred',error);
         }
     }
 
