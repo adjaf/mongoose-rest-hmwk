@@ -17,4 +17,6 @@ const TeacherModel = new mongoose.Schema({
     ]
 });
 
+// TODO: crear un metodo virtual fullName que devuelva first_name + last_name
+
 mongoose.model('Teacher', TeacherModel);
