@@ -125,3 +125,7 @@ exports.assignSubject = async function(req, res) {
         return res.status(400).send({ error });
     }
 }
+
+exports.withoutSubjects = function(req, res) {
+    // TODO: devolver students que no tengan subjects
+}
