@@ -49,6 +49,7 @@ async function runSeeder() {
         const randomSubjectIndex = faker.datatype.number({ min: 0, max: 9 });
         let randomSubjectIndex2 = faker.datatype.number({ min: 0, max: 9 });
         const randomStudentId = faker.random.alphaNumeric(6).toUpperCase();
+        const shouldHaveSubjects = faker.datatype.boolean();
 
         /** Do random again if repeated course */
         while (randomSubjectIndex2 == randomSubjectIndex) {
@@ -60,11 +61,14 @@ async function runSeeder() {
             last_name: faker.name.lastName(),
             career: faker.helpers.arrayElement(careers),
             student_id: randomStudentId,
-            subjects: [
+        };
+
+        if (shouldHaveSubjects) {
+            newStudentData.subjects = [
                 allSubjects[randomSubjectIndex]._id, // Subject 1 Id
                 allSubjects[randomSubjectIndex2]._id // Subject 2 Id
-            ]
-        };
+            ];
+        }
 
         newStudentData.email = faker.internet.email(newStudentData.first_name, newStudentData.last_name);
 
