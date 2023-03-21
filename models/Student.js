@@ -11,7 +11,8 @@ const StudentModel = new mongoose.Schema({
     },
     career: {
         type: String,
-        required: true
+        required: true,
+        enum: ['IBQ', 'TICS', 'ISC', 'IND', 'IGE', 'MEC']
     },
     student_id: {
         type: String,
