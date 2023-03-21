@@ -36,3 +36,7 @@ exports.assignSubject = async function(req, res) {
 
     // TODO: Assign subject to teacher 
 }
+
+exports.withoutSubjects = async function(req, res) {
+    // TODO: devolver teachers que no tengan subjects
+}
