@@ -4,12 +4,15 @@ const SubjectModel = mongoose.model('Subject');
 
 exports.getAll = function(req, res) {
     // TODO: Get all teachers
+    const teachers = TeacherModel.find();
+    return teachers
 }
 
 exports.getOne = async function(req, res) {
     const id = req.params.id;
     
     // TODO: Get one teacher with its subjects (I should display subject's name)
+    
 }
 
 exports.createTeacher = function(req, res) {
