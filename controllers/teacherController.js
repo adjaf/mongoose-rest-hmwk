@@ -63,15 +63,21 @@ exports.updateTeacher = function (req, res) {
     })
 }
 
-exports.deleteTeacher = function (req, res) {
+exports.deleteTeacher = async function (req, res) {
     const id = req.params.id;
     // TODO: Delete teacher, if it has subjects it shouldn't be deleted
-    TeacherModel.findByIdAndDelete(id, function(err, teacher) {
-        if (err) {
-            return res.send({ err });
-        }
-        return res.status(204).send().json({message: 'Teacher deleted successfully'});
-    })
+    const teacher = await TeacherModel.findById(id);
+    if(teacher.subjects.length == 0) {
+        TeacherModel.findByIdAndDelete(id, function(err, teacher) {
+            if (err) {
+                return res.send({ err });
+            }
+            return res.send({message: 'Teacher deleted successfully'});
+        })
+    } else {
+        return res.send({message: 'Teacher cannot be deleted'});
+    }
+    
 }
 
 exports.assignSubject = async function (req, res) {
@@ -91,13 +97,13 @@ exports.assignSubject = async function (req, res) {
 
         const subject = await SubjectModel.findById(subjectId);
 
-        teacher.teacher.push(subjectId);
-        subject.teacher.push(id);
+        teacher.subjects.push(subjectId);
+        subject.teacher = id
 
         await subject.save();
         const updatedTeacher = await teacher.save();
 
-        return res.send(updatedSubject);
+        return res.send(updatedTeacher);
     } catch (error) {
         return res.status(400).send({ error });
     } 

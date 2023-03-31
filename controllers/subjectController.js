@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const SubjectModel = mongoose.model('Subject');
+const TeacherModel = mongoose.model('Teacher');
 
 exports.getAll = function(req, res) {
     // TODO: get all subjects
@@ -62,29 +63,36 @@ exports.updateSubject = function(req, res) {
     })
 }
 
-exports.deleteSubject = function(req, res) {
+exports.deleteSubject = async function(req, res) {
     // TODO: Delete subject, if it has students, it can't be deleted
     const id = req.params.id;
 
-    SubjectModel.findByIdAndDelete(id, function(err, subject) {
-        if (err) {
-            return res.send({ err });
-        }
-        return res.status(204).send().json({message: 'Subject deleted successfully'});
-    })
+    const subject = await SubjectModel.findById(id);
+    if(subject.students.length == 0) {
+        SubjectModel.findByIdAndDelete(id, function(err, subject) {
+            if (err) {
+                return res.send({ err });
+            }
+            return res.send({message: 'Subject deleted successfully'});
+        })
+    } else {
+        return res.send({message: 'Subject cannot be deleted'});
+    }
+
+    
 }
 
 exports.getByName = async function(req, res) {
     // TODO: search subject by name
-    const search = req.params.search;
-    if (!search) {
+    const name = req.params.name;
+    if (!name) {
         let subjects = await SubjectModel.find();
         return res.send(subjects);
     }
 
     try {
         const subjects = await SubjectModel.find({
-             name: { '$regex': search, '$options': 'i' } 
+             name: { '$regex': name, '$options': 'i' } 
         });
         
         if (!subjects) {
@@ -112,10 +120,10 @@ exports.assignTeacher = async function(req, res) {
             return res.status(422).send({ err: "Please send a teacher" });
         }
 
-        const teacher = await SubjectModel.findById(teacherId);
+        const teacher = await TeacherModel.findById(teacherId);
 
-        subject.teacher.push(teacherId);
-        teacher.subject.push(id);
+        subject.teacher = teacherId;
+        teacher.subjects.push(id);
 
         await teacher.save();
         const updatedSubject = await subject.save();
