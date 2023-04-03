@@ -2,40 +2,113 @@ const mongoose = require('mongoose');
 const TeacherModel = mongoose.model('Teacher');
 const SubjectModel = mongoose.model('Subject');
 
-exports.getAll = function(req, res) {
+exports.getAll = async function (req, res) {
     // TODO: Get all teachers
-    const teachers = TeacherModel.find();
-    return teachers
+    const teachers = await TeacherModel.find();
+    return res.status(200).json({
+        message: "This are all the teachers found:",
+        data: teachers
+    });
 }
 
-exports.getOne = async function(req, res) {
+exports.getOne = async function (req, res) {
     const id = req.params.id;
-    
+
     // TODO: Get one teacher with its subjects (I should display subject's name)
-    
+    try {
+        const teacher = await TeacherModel.findById(id).populate('subjects');
+
+        if (!teacher) {
+            return res.status(404).send({ err: "Teacher not found" });
+        }
+
+        return res.send(teacher);
+    } catch (error) {
+        return res.status(400).send({ error });
+    }
 }
 
-exports.createTeacher = function(req, res) {
+exports.createTeacher = function (req, res) {
     const body = req.body;
-
+    if (!body || body === '') {
+        res.status(400).json({
+            message: "The teacher properties cannot be empty"
+        });
+        return;
+    }
+    const teacher = new TeacherModel({
+        first_name: {
+            body.first_name,
+        },
+        last_name: {
+            body.last_name,
+        },
+        subjects: [
+            body.subjects,
+        ]
+    });
     // TODO: create teacher
 }
 
-exports.updateTeacher = function(req, res) {
+exports.updateTeacher = function (req, res) {
     const id = req.params.id;
     const body = req.body;
 
     // TODO: Update teacher
+
+    TeacherModel.findByIdAndUpdate(id, body, { new: true }, function (err, teacher) {
+        if (!teacher) {
+            return res.status(404).send({ err: "Teacher not found " });
+        }
+
+        if (err) {
+            return res.send({ err });
+        }
+
+        return res.send(teacher);
+    })
+
 }
 
-exports.deleteTeacher = function(req, res) {
+exports.deleteTeacher = function (req, res) {
     const id = req.params.id;
     // TODO: Delete teacher, if it has subjects it shouldn't be deleted
+
+    TeacherModel.findByIdAndDelete(id, function (err, teacher) {
+        if (err) {
+            return res.send({ err });
+        }
+
+        return res.status(204).send();
+    })
 }
 
-exports.assignSubject = async function(req, res) {
+exports.assignSubject = async function (req, res) {
     const id = req.params.id;
     const subjectId = req.body.subjectId;
 
     // TODO: Assign subject to teacher 
+    try {
+        const teacher = await TeacherModel.findById(id);
+
+        if (!teacher) {
+            return res.status(404).send({ err: "Teacher not found" });
+        }
+
+        if (!subjectId) {
+            return res.status(422).send({ err: "Please send subject" });
+        }
+
+        const subject = await SubjectModel.findById(subjectId);
+
+        teacher.subjects.push(subjectId);
+        subject.teacher.push(id);
+
+        await subject.save();
+        const updatedTeacher = await teacher.save();
+
+        return res.send(updatedTeacher);
+    } catch (error) {
+        return res.status(400).send({ error });
+    }
 }
