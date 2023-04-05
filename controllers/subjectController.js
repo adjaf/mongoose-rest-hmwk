@@ -5,11 +5,11 @@ const TeacherModel = mongoose.model('Teacher');
 exports.getAll = function (req, res) {
     // TODO: get all subjects
     SubjectModel.find()
-        .then((subjects) => {
+        .then((subjects)=>{
             return res.send(subjects);
         })
-        .catch(err => {
-            return res.status(400).send(err);
+        .catch(err=>{
+            res.status(400).send(err);
         })
 }
 
@@ -30,17 +30,15 @@ exports.getOne = async function (req, res) {
 
 exports.createSubject = function (req, res) {
     // TODO: Create subject
-    const subject = req.body;
+    const body = req.body;
 
-    SubjectModel.create(body, function (err, subject) {
+    StudentModel.create(body, function(err, subject) {
         if (!subject) {
             return res.status(422).send({ "error": true });
         }
-
         if (err) {
             return res.status(400).send({ "error": true });
         }
-
         return res.send(subject);
     });
 }
@@ -65,31 +63,21 @@ exports.updateSubject = function (req, res) {
 
 exports.deleteSubject = function (req, res) {
     // TODO: Delete subject, if it has students, it can't be deleted
+    const id = req.params.id;
+
+    StudentModel.findByIdAndDelete(id, function(err, student) {
+        if (err) {
+            return res.send({ err });
+        }
+
+        return res.status(204).send();
+    })
 }
 
 exports.getByName = async function (req, res) {
     // TODO: search subject by name
-    const search = req.params.search;
-
-    if (!search) {
-        let subject = await SubjectModel.find();
-
-        return res.send(subject);
-    }
-
-    try {
-        const subject = await SubjectModel.find({
-            name: { '$regex': search, '$options': 'i' }
-        });
-
-        if (!subject) {
-            return res.status(404).send({ err: "Student not found" });
-        }
-
-        return res.send(subject);
-    } catch (error) {
-        return res.status(400).send({ error });
-    }
+    const name = req
+    const subject = SubjectModel.findOne(n)
 }
 
 exports.assignTeacher = async function (req, res) {
