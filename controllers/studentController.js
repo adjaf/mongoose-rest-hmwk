@@ -126,8 +126,19 @@ exports.assignSubject = async function(req, res) {
     }
 }
 
-exports.studentsById = function(req, res) {
+exports.studentsById = async function(req, res) {
     const studentId = req.params.studentId;
 
     // TODO: Devolver student que tenga ese student_id
+    try {
+        const student = await TeacherModel.findById(studentId);
+
+        if (!student) {
+            return res.status(404).send({ err: "Student not found" });
+        }
+
+        return res.send(student);
+    } catch (error) {
+        return res.status(400).send({ error });
+    }
 }

@@ -5,18 +5,19 @@ const TeacherModel = mongoose.model('Teacher');
 exports.getAll = function (req, res) {
     // TODO: get all subjects
     SubjectModel.find()
-        .then((subjects)=>{
+        .then((subjects) => {
             return res.send(subjects);
         })
-        .catch(err=>{
-            res.status(400).send(err);
+        .catch(err => {
+            return res.status(400).send(err);
         })
 }
 
 exports.getOne = async function (req, res) {
+    const id = req.params.id;
     // TODO: get one subject with their teachers and students
     try {
-        const subject = await StudentModel.findById(id).populate('subjects', 'teachers');
+        const subject = await SubjectModel.findById(id).populate('teachers', 'students');
 
         if (!subject) {
             return res.status(404).send({ err: "Subject not found" });
@@ -32,13 +33,15 @@ exports.createSubject = function (req, res) {
     // TODO: Create subject
     const body = req.body;
 
-    StudentModel.create(body, function(err, subject) {
+    SubjectModel.create(body, function (err, subject) {
         if (!subject) {
             return res.status(422).send({ "error": true });
         }
+
         if (err) {
             return res.status(400).send({ "error": true });
         }
+
         return res.send(subject);
     });
 }
@@ -61,10 +64,13 @@ exports.updateSubject = function (req, res) {
     })
 }
 
-exports.deleteSubject = function (req, res) {
+exports.deleteSubject = async function (req, res) {
     // TODO: Delete subject, if it has students, it can't be deleted
     const id = req.params.id;
-
+    const subject = await SubjectModel.findById(id);
+    if(subject.students.length === 0){
+        return res.send({err: "The subject has students enrolled so it cannot be deleted"});
+    }
     StudentModel.findByIdAndDelete(id, function(err, student) {
         if (err) {
             return res.send({ err });
@@ -76,8 +82,27 @@ exports.deleteSubject = function (req, res) {
 
 exports.getByName = async function (req, res) {
     // TODO: search subject by name
-    const name = req
-    const subject = SubjectModel.findOne(n)
+    const search = req.params.search;
+
+    if (!search) {
+        let subject = await SubjectModel.find();
+
+        return res.send(subject);
+    }
+
+    try {
+        const subject = await SubjectModel.find({
+            name: { '$regex': search, '$options': 'i' }
+        });
+
+        if (!subject) {
+            return res.status(404).send({ err: "Student not found" });
+        }
+
+        return res.send(subject);
+    } catch (error) {
+        return res.status(400).send({ error });
+    }
 }
 
 exports.assignTeacher = async function (req, res) {

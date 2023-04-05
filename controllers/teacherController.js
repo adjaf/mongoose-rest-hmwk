@@ -30,24 +30,24 @@ exports.getOne = async function (req, res) {
 
 exports.createTeacher = function (req, res) {
     const body = req.body;
+    // TODO: create teacher
     if (!body || body === '') {
         res.status(400).json({
             message: "The teacher properties cannot be empty"
         });
         return;
     }
-    const teacher = new TeacherModel({
-        first_name: {
-            body.first_name,
-        },
-        last_name: {
-            body.last_name,
-        },
-        subjects: [
-            body.subjects,
-        ]
+   TeacherModel.create(body, function(err, teacher) {
+        if (!teacher) {
+            return res.status(422).send({ "error": true });
+        }
+
+        if (err) {
+            return res.status(400).send({ "error": true });
+        }
+
+        return res.send(teacher);
     });
-    // TODO: create teacher
 }
 
 exports.updateTeacher = function (req, res) {
@@ -70,10 +70,13 @@ exports.updateTeacher = function (req, res) {
 
 }
 
-exports.deleteTeacher = function (req, res) {
+exports.deleteTeacher = async function (req, res) {
     const id = req.params.id;
     // TODO: Delete teacher, if it has subjects it shouldn't be deleted
-
+    const teacher = await TeacherModel.findById(id);
+    if(teacher.subjects.length === 0){
+        return res.send({err: "The teacher has subjects so it cannot be deleted"});
+    }
     TeacherModel.findByIdAndDelete(id, function (err, teacher) {
         if (err) {
             return res.send({ err });
